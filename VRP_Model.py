@@ -69,18 +69,25 @@ for k in range(n_vehicles):
 
 
 # Each customer must be visited within a certain time window.
-# This has two subconstraints, the first one is that a customer must be visited in their specified time window.
+# This has two subconstraints. The first one is that a customer must be visited in their specified time window.
 for i in range(n_customers):
     model.addConstr(e_i[i] <= tau_i[i], name=f"lower_bound_visiting_time_customer_{i}")
     model.addConstr(tau_i[i] <= l_i[i], name=f"upper_bound_visiting_time_customer_{i}")
 
 # The second subconstraint is a time precedence constraint. If we travel from i to j, we can't arrive sooner than the
-# time it takes to drop the package at i and the travel time from i to j.
-M = 1000
+# time it takes to drop the package at i and travel from i to j.
 for i in range(n_customers):
     for j in range(n_customers):
-        model.addConstr(tau_i[j] >= tau_i[i] + p_i[i] + t_ij[i, j] - (1 - sum(x_k_ij[:, i, j])) * M,
-                        name=f"time_precedence_from_{i}_to_{j}")
+        if i == j:
+            continue
+
+        else:
+            # We use the big M method so this constraint is always satisfied if we don't travel from i to j. We want
+            # M to be big but not too big, so we calculate its minimum value.
+            M = max(0, l_i[i] + p_i[i] + t_ij[i, j] - e_i[j])
+            
+            model.addConstr(tau_i[j] >= tau_i[i] + p_i[i] + t_ij[i, j] - (1 - sum(x_k_ij[:, i, j])) * M,
+                            name=f"time_precedence_from_{i}_to_{j}")
 
 # Optional: Buy extra vehicles.
 # Optional: Pickup packages and bring them back to the depot.
