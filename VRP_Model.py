@@ -1,18 +1,56 @@
-"""
-Constraints:
-- Each vehicle must leave depot.
-- Each vehicle must return to depot.
-- Each customer must be visited once.
-- If a vehicle visits a customer the same vehicle must leave that customer.
-- Vehicle capacity.
-- Time windows
+# Sets up and solves a vehicle routing problem.
 
-Optional constraints:
-- Buy extra vehicles.
-- Delivery time (time it takes to drop off package).
-- Pickup packages and bring them back to depot.
+# Imports.
+import numpy as np
+from gurobipy import Model, GRB, LinExpr  # How to get this module on your computer?
 
-Decision variables:
-- x_k_ij: vehicle k goes from i to j.
+###############
+# Model setup #
+###############
 
-"""
+# Import the data needed to solve this problem...
+
+# Define the objective function.
+
+
+#############
+# Variables #
+#############
+
+# Define the decision variables.
+# x_k_ij: vehicle k goes from i to j.
+
+###############
+# Constraints #
+###############
+
+# Each vehicle must leave the depot.
+
+
+# Each vehicle must return to depot.
+
+
+# Each customer must be visited once.
+
+
+# If a vehicle visits a customer, the same vehicle must leave that customer.
+
+
+# Each vehicle has a maximum capacity.
+
+
+# Each customer must be visited within a certain time window.
+
+
+# Optional: Buy extra vehicles.
+# Optional: Time it takes to drop off a packages.
+# Optional: Pickup packages and bring them back to the depot.
+
+
+#####################
+# Solving the model #
+#####################
+
+# Export is as an LP file.
+
+# Optimize.
