@@ -41,10 +41,28 @@ tau_i = model.addVars(n_nodes, vtype=GRB.CONTINUOUS, name="tau_i")           # S
 # Constraints #
 ###############
 
-# Each vehicle must leave the depot.
+# Each vehicle must leave and return to the depot.
+for k in range(n_vehicles):
+    for i, j in data[['From','To']].itertuples(index=False):
+        if i == 0 and i != j:
+            thisLHS = LinExpr()
+            thisLHS += x_k_ij[k,i,j]
+            model.addConstr(lhs=thisLHS, sense = GRB.EQUAL, rhs=1)
 
+        if j == 0:
+            thisLHS = LinExpr()
+            thisLHS += x_k_ij[k,i,j]
+            model.addConstr(lhs=thisLHS, sense = GRB.EQUAL, rhs=0)
 
-# Each vehicle must return to depot.
+        if i == 0 and i != j:
+            thisLHS = LinExpr()
+            thisLHS += x_k_ij[k,j,i]
+            model.addConstr(lhs=thisLHS, sense = GRB.EQUAL, rhs=1)
+
+        if j == 0:
+            thisLHS = LinExpr()
+            thisLHS += x_k_ij[k,j,i]
+            model.addConstr(lhs=thisLHS, sense = GRB.EQUAL, rhs=0)
 
 
 # Each customer must be visited once.
