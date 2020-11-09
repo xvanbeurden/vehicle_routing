@@ -152,3 +152,6 @@ model.optimize()
 sol = []
 for v in model.getVars():
      sol.append([v.varName, v.x])
+
+soldata = pd.DataFrame(sol, columns=["Name", "Value"])
+soldata.to_excel('solution.xlsx', index=False)
